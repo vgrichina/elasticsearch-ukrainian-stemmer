@@ -1,9 +1,6 @@
 package com.componentix.nlp.stemmer.uk.elasticsearch;
 
 import org.apache.lucene.analysis.TokenStream;
-import org.apache.lucene.analysis.TokenFilter;
-import org.apache.lucene.analysis.tokenattributes.KeywordAttribute;
-import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.elasticsearch.ElasticSearchIllegalArgumentException;
 import org.elasticsearch.common.inject.Inject;
 import org.elasticsearch.common.settings.Settings;
@@ -25,20 +22,6 @@ public class UkrainianStemmerTokenFilterFactory extends AbstractTokenFilterFacto
 
     @Override
     public TokenStream create(TokenStream tokenStream) {
-        return new TokenFilter(tokenStream) {
-            private final CharTermAttribute termAtt = addAttribute(CharTermAttribute.class);
-            private final KeywordAttribute keywordAttr = addAttribute(KeywordAttribute.class);
-
-            @Override
-            public final boolean incrementToken() throws IOException {
-                if (!input.incrementToken()) return false;
-
-                if (!keywordAttr.isKeyword()) {
-                    String result = stemmer.stem(new String(termAtt.buffer(), 0, termAtt.length()));
-                    termAtt.setEmpty().append(result);
-                }
-                return true;
-            }
-        };
+        return new UkrainianStemmerTokenFilter(tokenStream);
     }
 }

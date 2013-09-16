@@ -22,7 +22,7 @@ public class UkrainianStemmerAnalyzerProvider extends AbstractIndexAnalyzerProvi
     private final Analyzer analyzer = new StopwordAnalyzerBase(Version.LUCENE_40) {
         @Override
         protected TokenStreamComponents createComponents(final String fieldName, final Reader reader) {
-            final Tokenizer source = new  StandardTokenizer(matchVersion, reader);
+            final Tokenizer source = new StandardTokenizer(matchVersion, reader);
             TokenStream result = new LowerCaseFilter(matchVersion, source);
             result = new StopFilter(matchVersion, result, stopwords);
 
@@ -32,8 +32,7 @@ public class UkrainianStemmerAnalyzerProvider extends AbstractIndexAnalyzerProvi
                 result, stemExclusionSet);
             */
 
-            // TODO: Create stemmer
-            // result = new SnowballFilter(result, new org.tartarus.snowball.ext.RussianStemmer());
+            result = new UkrainianStemmerTokenFilter(result);
             return new TokenStreamComponents(source, result);
         }
     };
