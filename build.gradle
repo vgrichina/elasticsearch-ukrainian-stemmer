@@ -1,0 +1,20 @@
+apply plugin: 'java'
+apply plugin: 'groovy'
+apply plugin: 'maven'
+
+group = 'com.componentix'
+version = '1.0-SNAPSHOT'
+
+description = """Ukrainian stemmer plugin for ElasticSearch"""
+
+repositories {
+    mavenLocal()
+    mavenRepo url: "https://oss.sonatype.org/content/repositories/releases"
+    mavenRepo url: "https://oss.sonatype.org/content/repositories/snapshots"
+    mavenRepo url: "http://repo.maven.apache.org/maven2"
+}
+
+dependencies {
+    compile group: 'org.elasticsearch', name: 'elasticsearch', version:'0.90.3'
+    compile group: 'com.componentix', name: 'ukrainian-stemmer', version:'1.0-SNAPSHOT'
+}
