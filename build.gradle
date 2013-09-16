@@ -18,3 +18,40 @@ dependencies {
     compile group: 'org.elasticsearch', name: 'elasticsearch', version:'0.90.3'
     compile group: 'com.componentix', name: 'ukrainian-stemmer', version:'1.0-SNAPSHOT'
 }
+
+
+explodedDistDir = new File(distsDir, 'exploded')
+
+manifest.mainAttributes("Implementation-Title": "ElasticSearch::Plugins::Analysis::UkrainianStemmer", "Implementation-Version": rootProject.version, "Implementation-Date": new Date().format("yyyy-MM-dd HH:mm:ss"))
+
+task explodedDist(dependsOn: [jar], description: 'Builds the plugin zip file') << {
+    [explodedDistDir]*.mkdirs()
+
+    copy {
+        from configurations.compile
+        into explodedDistDir
+    }
+
+    ant.delete { fileset(dir: explodedDistDir, includes: "elasticsearch-*.jar") }
+
+    copy {
+        from libsDir
+        into explodedDistDir
+    }
+
+    ant.delete { fileset(dir: explodedDistDir, includes: "lucene-*.jar") }
+    ant.delete { fileset(dir: explodedDistDir, includes: "spatial4j-*.jar") }
+}
+
+task zip(type: Zip, dependsOn: ['explodedDist']) {
+    from(explodedDistDir) {
+    }
+}
+
+task release(dependsOn: [zip]) << {
+    ant.delete(dir: explodedDistDir)
+    copy {
+        from distsDir
+        into(new File(rootProject.distsDir, "plugins"))
+    }
+}
