@@ -4,6 +4,8 @@ apply plugin: 'maven'
 
 group = 'com.componentix'
 version = '1.0-SNAPSHOT'
+sourceCompatibility = "1.6"
+targetCompatibility = "1.6"
 
 description = """Ukrainian stemmer plugin for ElasticSearch"""
 
